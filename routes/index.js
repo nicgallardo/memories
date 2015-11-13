@@ -34,18 +34,27 @@ router.get('/api/v1/memories', function(req, res){
   });
 });
 
-router.get('/api/v1/memories/:id', function(req, res){
+router.get('/api/v1/memories/years', function(req, res){
   pg.connect(conString, function(err, client, done){
-    console.log(req.params.id);
     if(err){
       return console.error('error fetching client from pool', err);
     }
-    client.query('SELECT * FROM memories WHERE year = $1',[req.params.id], function(err, result){
+    client.query('SELECT DISTINCT year as year FROM memories', function(err, result){
       console.log(result);
-      res.json(result.rows[0])
+      res.json(result.rows)
     })
   });
 });
 
+router.get('/api/v1/memories/:id', function(req, res){
+  pg.connect(conString, function(err, client, done){
+    if(err){
+      return console.error('error fetching client from pool', err);
+    }
+    client.query('SELECT * FROM memories WHERE year = $1',[req.params.id], function(err, result){
+      res.json(result)
+    })
+  });
+});
 
 module.exports = router;
