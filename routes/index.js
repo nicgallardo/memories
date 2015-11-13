@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
-require('dotenv').load();
-var conString = process.env.DATABASE_URL || "postgres://@localhost/memoriesapp";
+var conString = process.env.DATABASE_URL || "postgres://localhost/memoriesapp";
+
 
 
 /* GET users listing. */
