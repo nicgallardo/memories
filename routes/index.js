@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
-var conString = "postgres://@localhost/memoriesapp";
+require('dotenv').load();
+var conString = process.env.DATABASE_URL || "postgres://@localhost/memoriesapp";
 
 
 /* GET users listing. */
@@ -20,5 +21,18 @@ router.post('/api/v1/memories', function(req, res, next) {
     });
   });
 });
+
+router.get('/api/v1/memories', function(req, res){
+  pg.connect(conString, function(err, client, done){
+    if(err){
+      return console.error('error fetching client from pool', err);
+    }
+    client.query('SELECT * FROM memories', function(err, result){
+      console.log(result);
+      res.json(result.rows)
+    })
+  });
+});
+
 
 module.exports = router;
